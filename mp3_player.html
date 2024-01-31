@@ -5,34 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MP3 Player with Visualizer</title>
   <style>
-
     body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-image: url('./1987321.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-image: url('./1987321.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
 
     #audio-container {
       text-align: center;
       margin-top: 50px;
     }
+
     canvas {
       display: block;
       margin: 20px auto;
       background-color: #000000;
     }
+
+    #playlist {
+      text-align: left;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #playlist li {
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
 
 <div id="audio-container">
-  <label for="fileInput">Choose an MP3 file:   </label>
-  <input type="file" id="fileInput" accept="audio/mp3">
-  
+  <label for="fileInput">Choose MP3 files:   </label>
+  <input type="file" id="fileInput" accept="audio/mp3" multiple>
+
   <br>
-  
+
   <audio id="audio" controls>
     <source id="audioSource" type="audio/mp3">
     Your browser does not support the audio element.
@@ -40,11 +55,14 @@
   <canvas id="visualizer" width="500" height="100"></canvas>
 </div>
 
+<div id="playlist"></div>
+
 <script>
   const fileInput = document.getElementById('fileInput');
   const audio = document.getElementById('audio');
   const audioSource = document.getElementById('audioSource');
   const canvas = document.getElementById('visualizer');
+  const playlist = document.getElementById('playlist');
   const ctx = canvas.getContext('2d');
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
   const analyzer = audioContext.createAnalyser();
@@ -79,18 +97,36 @@
   }
 
   fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const objectURL = URL.createObjectURL(file);
-      audioSource.src = objectURL;
-      audio.load();
+    const files = event.target.files;
+    if (files.length > 0) {
+      playlist.innerHTML = ''; // Clear existing playlist
+
+      for (const file of files) {
+        const listItem = document.createElement('li');
+        listItem.textContent = file.name;
+        listItem.addEventListener('click', () => playSong(file));
+        playlist.appendChild(listItem);
+      }
+
+      // Play the first song in the playlist
+      playSong(files[0]);
     }
   });
 
-  audio.addEventListener('play', () => {
-    audioContext.resume().then(() => {
-      draw();
-    });
+  function playSong(file) {
+    const objectURL = URL.createObjectURL(file);
+    audioSource.src = objectURL;
+    audio.load();
+    audio.play();
+    audio.addEventListener('play', () => audioContext.resume().then(() => draw()));
+  }
+
+  audio.addEventListener('ended', () => {
+    // Play the next song in the playlist
+    const nextSong = playlist.querySelector('.active').nextElementSibling;
+    if (nextSong) {
+      nextSong.click();
+    }
   });
 
   audio.addEventListener('pause', () => {
