@@ -8,27 +8,11 @@ This project is a simple HTML-based MP3 player with a visualizer using the HTML5
 $ podman run quay.io/podman/hello
 
 Trying to pull quay.io/podman/hello:latest...
-
 Getting image source signatures
-
 Copying blob a6b3126f3807 done
-
 Copying config 25c667d086 done
-
 Writing manifest to image destination
-
 Storing signatures
-
-         .--"--.
-       / -     - \
-      / (O)   (O) \
-   ~~~| -=(,Y,)=- |
-    .---. /`  \   |~~
- ~/  o  o \~~~~.----. ~~
-  | =(X)= |~  / (O (O) \
-   ~~~~~~~  ~| =(Y_)=-  |
-  ~~~~    ~~~|   U      |~~
-
 Project:   https://github.com/containers/podman
 Website:   https://podman.io
 Documents: https://docs.podman.io
@@ -39,7 +23,7 @@ Twitter:   @Podman_io
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/darrenlavery91/maytheforcebewithyou/.git
+   git clone https://github.com/darrenlavery91/maytheforcebewithyou.git
    cd maytheforcebewithyou
    ```
 
