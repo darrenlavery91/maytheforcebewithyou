@@ -6,13 +6,18 @@ This project is a simple HTML-based MP3 player with a visualizer using the HTML5
 - [Podman](https://podman.io/)
 
 $ podman run quay.io/podman/hello
+
 Trying to pull quay.io/podman/hello:latest...
+
 Getting image source signatures
+
 Copying blob a6b3126f3807 done
+
 Copying config 25c667d086 done
+
 Writing manifest to image destination
+
 Storing signatures
-!... Hello Podman World ...!
 
          .--"--.
        / -     - \
