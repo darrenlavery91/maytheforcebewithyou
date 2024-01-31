@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MP3 Player with Visualizer</title>
+  <style>
+
+    body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-image: url('/Users/darrenlavery/Documents/Starwars_mp3_player/1987321.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+    #audio-container {
+      text-align: center;
+      margin-top: 50px;
+    }
+    canvas {
+      display: block;
+      margin: 20px auto;
+      background-color: #000000;
+    }
+  </style>
+</head>
+<body>
+
+<div id="audio-container">
+  <label for="fileInput">Choose an MP3 file:   </label>
+  <input type="file" id="fileInput" accept="audio/mp3">
+  
+  <br>
+  
+  <audio id="audio" controls>
+    <source id="audioSource" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+  <canvas id="visualizer" width="500" height="100"></canvas>
+</div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const audio = document.getElementById('audio');
+  const audioSource = document.getElementById('audioSource');
+  const canvas = document.getElementById('visualizer');
+  const ctx = canvas.getContext('2d');
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const analyzer = audioContext.createAnalyser();
+  const source = audioContext.createMediaElementSource(audio);
+  source.connect(analyzer);
+  analyzer.connect(audioContext.destination);
+  analyzer.fftSize = 256;
+  const bufferLength = analyzer.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  const barWidth = (canvas.width / bufferLength) * 2.5;
+  let barHeight;
+  let x = 0;
+
+  function draw() {
+    requestAnimationFrame(draw);
+
+    analyzer.getByteFrequencyData(dataArray);
+
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
+      ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+
+      x += barWidth + 1;
+    }
+
+    x = 0;
+  }
+
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const objectURL = URL.createObjectURL(file);
+      audioSource.src = objectURL;
+      audio.load();
+    }
+  });
+
+  audio.addEventListener('play', () => {
+    audioContext.resume().then(() => {
+      draw();
+    });
+  });
+
+  audio.addEventListener('pause', () => {
+    cancelAnimationFrame(draw);
+  });
+</script>
+
+</body>
+</html>
