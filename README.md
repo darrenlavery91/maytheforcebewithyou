@@ -39,6 +39,8 @@ Twitter:   @Podman_io
 
 4. Open your web browser and go to [http://localhost:8080/mp3_player.html](http://localhost:8080/mp3_player.html) to use the MP3 player with visualizer.
 
+5. Use the "Choose files" button and select multiple mp3 files on your local machine, it will create a playlist in the ui, to skip songs just select the song name. Enjoy!
+
 ## Customization
 
 - **Background Image:** Replace `1987321.jpg` with your preferred background image. Ensure the file is in the same directory as the Dockerfile.
