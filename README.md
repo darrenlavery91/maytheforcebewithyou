@@ -2,7 +2,7 @@
 
 This project is a simple HTML-based MP3 player with a visualizer using the HTML5 Canvas element. It includes an interface to choose an MP3 file and visualize its frequency data in real-time.
 
-![Alt Text](Screenshot 2024-02-17 at 10 57 44)
+![Screenshot](Screenshot 2024-02-17 at 10 57 44)
 
 ## Requirements
 - [Podman](https://podman.io/)
